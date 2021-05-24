@@ -1,0 +1,208 @@
+{
+	"name": "Nut",
+    "scopeName": "source.nut",
+    "patterns": [
+        { "include": "#directives" },
+        { "include": "#variables" },
+        { "include": "#keywords" },
+        { "include": "#operators" },
+        { "include": "#declarators" },
+        { "include": "#constants" },
+        { "include": "#types" },
+        { "include": "#comments" }
+    ],
+    "repository": {
+        "directives": {
+            "match": "\\$[A-Z_a-z][0-9A-Z_a-z]*",
+            "name": "support.function.nut"
+        },
+        "types": {
+            "patterns": [
+                {
+                    "match": "\\b_?_?[A-Z][0-9A-Z_a-z]*\\b'",
+                    "name": "string.interpolated.nut"
+                },
+                {
+                    "match": "\\b_?_?[A-Z][0-9A-Z_a-z]*\\b",
+                    "name": "support.type.nut"
+                }
+            ]
+        },
+        "constants": {
+            "patterns": [
+                {
+                    "match": "\\b_?_?[A-Z][0-9A-Z_]+\\b",
+                    "name": "constant.language.nut"
+                },
+                {
+                    "match": "\\b0x[0-9A-Fa-f]+\\b|\\b[0-9]+(\\.[0-9]+)?\\b",
+                    "name": "constant.numeric.nut"
+                },
+                {
+                    "include": "#strings"
+                }
+            ]
+        },
+        "variables": {
+            "match": "\\bself\\b",
+            "name": "variable.language.nut"
+        },
+        "operators": {
+            "match": "\\b(mut|new)\\b",
+            "name" : "keyword.other.nut"
+        },
+        "declarators": {
+            "patterns": [
+                {
+                    "match": "^\\s*(namespace|using)\\s+(\\w+(\\.\\w+)*)",
+                    "captures": {
+                        "1": { "name": "keyword.other.nut" },
+                        "2": { "name": "entity.name.function.nut" }
+                    }
+                },
+                {
+                    "match": "^\\s*(pub\\s+)?(_?_?[A-Z][0-9A-Z_a-z]*)\\s+(\\w+)?\\s*:\\s*(TYPE)",
+                    "captures": {
+                        "1": { "name": "keyword.other.nut" },
+                        "2": { "name": "variable.argument.nut" },
+                        "3": { "name": "support.type.nut"},
+                        "4": { "name": "keyword.other.nut" }
+                    }
+                },
+                {
+                    "begin": "^\\s*(pub\\s+)?(_?_?[A-Z][0-9A-Z_a-z]*)\\s*\\[",
+                    "beginCaptures": {
+                        "1": { "name": "keyword.other.nut" },
+                        "2": { "name": "variable.argument.nut" }
+                    },
+                    "end": "\\]\\s+(\\w+)?\\s*:\\s*(CONST|TYPE)",
+                    "endCaptures": {
+                        "1": { "name": "support.type.nut"},
+                        "2": { "name": "keyword.other.nut" }
+                    },
+                    "patterns": [
+                        { "include": "#constants" }
+                    ]
+                },
+                {
+                    "match": "(pub\\s+)?(_?_?[A-Z][0-9A-Z_a-z]*)(\\s+\\w+)?\\s*:\\s*(CONST)",
+                    "captures": {
+                        "1": { "name": "keyword.other.nut" },
+                        "2": { "name": "variable.argument.nut" },
+                        "3": { "name": "support.type.nut"},
+                        "4": { "name": "keyword.other.nut" }
+                    }
+                },
+                {
+                    "match": "^\\s*(impl)\\s+(\\w+)\\s+(for)\\s+(\\w+)(,\\s+(\\w+))*",
+                    "captures": {
+                        "1": { "name": "keyword.other.nut" },
+                        "2": { "name": "variable.argument.nut"},
+                        "3": { "name": "keyword.other.nut" },
+                        "4": { "name": "support.type.nut"},
+                        "6": { "name": "support.type.nut"}
+                    }
+                },
+                {
+                    "match": "^\\s*(impl)\\s+(\\w+)",
+                    "captures": {
+                        "1": { "name": "keyword.other.nut" },
+                        "2": { "name": "variable.argument.nut"}
+                    }
+                },
+                {
+                    "match": "\\bconst\\b",
+                    "name": "storage.modifier.nut"
+                },
+                {
+                    "begin": "^\\s*(\\b[A-Z_][0-9A-Z_a-z]*\\b)\\(",
+                    "beginCaptures": {
+                        "1": { "name": "variable.argument.nut" }
+                    },
+                    "end": "\\)(\\s+\\w+)?\\s*:\\s*(TYPE);",
+                    "endCaptures": {
+                        "1": { "name": "support.type.nut" },
+                        "2": { "name": "keyword.other.nut" }
+                    },
+                    "patterns": [{ "include": "#parameters" }]
+                },
+                {
+                    "begin": "\\s*((\\bpub\\b)\\s+)?(\\b[a-z_][0-9A-Z_a-z]*\\b)\\(",
+                    "beginCaptures": {
+                        "2": { "name": "storage.modifier.nut" },
+                        "3": { "name": "entity.name.function.nut" }
+                    },
+                    "end": "\\)",
+                    "patterns": [ { "include": "#parameters" } ]
+                }
+            ]
+        },
+        "parameters": {
+            "patterns": [
+                {
+                    "match": "\\bmut\\b",
+                    "name": "keyword.other.nut"
+                },
+                {
+                    "begin": "(_?_?[a-z][0-9A-Z_a-z]*)\\(",
+                    "beginCaptures": {
+                        "1": { "name": "entity.name.function.nut" }
+                    },
+                    "end": "\\)",
+                    "patterns": [{ "include": "#parameters" }]
+                },
+                {
+                    "match": "\\bself\\b",
+                    "name": "variable.language.nut"
+                },
+                { "include": "#constants" },
+                { "include": "#types" },
+                { "include": "#operators" }
+            ]
+        },
+        "keywords": {
+            "match": "\\b(break|case|catch|continue|defer|do|else|for|goto|if|return|switch|throw|while)\\b",
+            "name": "keyword.control.nut"
+        },
+		"strings": {
+			"patterns": [
+				{
+					"name": "string.quoted.single.nut",
+					"begin": "'",
+					"end": "'",
+					"patterns": [
+						{
+							"name": "constant.character.escape.nut",
+							"match": "\\\\."
+						}
+					]
+				},
+				{
+					"name": "string.quoted.double.nut",
+					"begin": "\"",
+					"end": "\"",
+					"patterns": [
+						{
+							"name": "constant.character.escape.nut",
+							"match": "\\\\."
+						}
+					]
+				}
+			]
+		},
+        "comments": {
+            "patterns": [
+				{
+					"name": "comment.line.double-dash.nut",
+					"match": "((?://).*)$"
+				},
+				{
+					"name": "comment.block.nut",
+					"begin": "/\\*",
+					"end": "\\*/|\\\\.*$",
+                    "patterns": [{ "include": "#comments" }]
+				}
+            ]
+        }
+    }
+}
